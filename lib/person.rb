@@ -1,10 +1,11 @@
 class Person
-  attr_reader :name
+  attr_reader :name, :banks
   attr_accessor :cash
 
   def initialize(name, cash)
     @name = name
     @cash = cash.negative? ? 0 : cash
+    @banks = {}
     creation_msg
   end
 

@@ -13,6 +13,10 @@ describe Person do
       expect(subject.name).to eql('Minerva')
     end
 
+    it 'belongs to no banks' do
+      expect(subject.banks).to eql({})
+    end
+
     context 'when cash is positive' do
       it 'has a cash amount' do
         expect(subject.cash).to eql(1000)
