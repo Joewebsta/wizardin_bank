@@ -1,4 +1,5 @@
 require './lib/person'
+require './lib/bank'
 
 describe Person do
   subject { Person.new('Minerva', cash) }
@@ -35,6 +36,14 @@ describe Person do
   describe '#creation_msg' do
     it 'displays a creation message' do
       expect(subject.creation_msg).to eql('Minerva has been created with 1000 galleons in cash.')
+    end
+  end
+
+  describe '#add_banks' do
+    it 'adds an opened bank account' do
+      chase = Bank.new('Chase')
+      subject.add_bank(chase)
+      expect(subject.banks).to eql({ 'Chase' => { balance: 0 } })
     end
   end
 end

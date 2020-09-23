@@ -12,4 +12,8 @@ class Person
   def creation_msg
     "#{name} has been created with #{cash} galleons in cash."
   end
+
+  def add_bank(bank)
+    banks[bank.bank_name] = { balance: 0 }
+  end
 end
