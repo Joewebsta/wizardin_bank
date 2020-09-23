@@ -35,13 +35,18 @@ describe Bank do
       expect(subject.customers).to eql([{ person1.name => { balance: 0 } }, { person2.name => { balance: 0 } }])
     end
 
+    it "updates the person's bank hash" do
+      subject.open_account(person1)
+      expect(person1.banks).to eql({ 'JP Morgan Chase' => { balance: 0 } })
+    end
+
     it 'displays an account creation message' do
       expect(subject.open_account(person1)).to eql('An account has been opened for Joe with JP Morgan Chase.')
     end
   end
 
-  describe '#deposit' do
-    it 'does something' do
-    end
-  end
+  # describe '#deposit' do
+  #   it 'does something' do
+  #   end
+  # end
 end

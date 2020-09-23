@@ -42,7 +42,7 @@ describe Person do
   describe '#add_banks' do
     it 'adds an opened bank account' do
       chase = Bank.new('Chase')
-      subject.add_bank(chase)
+      subject.add_bank(chase.bank_name)
       expect(subject.banks).to eql({ 'Chase' => { balance: 0 } })
     end
   end

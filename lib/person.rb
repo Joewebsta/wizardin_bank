@@ -14,6 +14,6 @@ class Person
   end
 
   def add_bank(bank)
-    banks[bank.bank_name] = { balance: 0 }
+    banks[bank] = { balance: 0 }
   end
 end

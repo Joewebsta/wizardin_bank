@@ -14,6 +14,7 @@ class Bank
 
   def open_account(customer)
     customers <<  { customer.name => { balance: 0 } }
+    customer.add_bank(bank_name)
     "An account has been opened for #{customer.name} with #{bank_name}."
   end
 end
