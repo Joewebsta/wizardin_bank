@@ -1,10 +1,10 @@
 class Bank
   attr_reader :bank_name
-  attr_accessor :person
+  attr_accessor :customers
 
   def initialize(bank_name)
     @bank_name = bank_name
-    @person = nil
+    @customers = []
     creation_msg
   end
 
@@ -13,8 +13,7 @@ class Bank
   end
 
   def open_account(customer)
-    self.person = customer
-
+    customers <<  { customer.name => { balance: 0 } }
     "An account has been opened for #{customer.name} with #{bank_name}."
   end
 end
