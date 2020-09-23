@@ -3,6 +3,8 @@ require './lib/person'
 
 describe Bank do
   subject { Bank.new('JP Morgan Chase') }
+  let(:person1) { Person.new('Joe', 1000) }
+  let(:person2) { Person.new('Skylar', 20) }
 
   describe '#init' do
     it 'has a name' do
@@ -10,7 +12,7 @@ describe Bank do
     end
 
     it 'does not have customers by default' do
-      expect(subject.customers).to eql([])
+      expect(subject.customers).to eql({})
     end
   end
 
@@ -21,18 +23,15 @@ describe Bank do
   end
 
   describe '#open_account' do
-    let(:person1) { Person.new('Joe', 1000) }
-    let(:person2) { Person.new('Skylar', 20) }
-
     it 'adds a person to the bank' do
       subject.open_account(person1)
-      expect(subject.customers).to eql([{ person1.name => { balance: 0 } }])
+      expect(subject.customers).to eql({ person1.name => { balance: 0 } })
     end
 
     it 'adds a second person to the bank' do
       subject.open_account(person1)
       subject.open_account(person2)
-      expect(subject.customers).to eql([{ person1.name => { balance: 0 } }, { person2.name => { balance: 0 } }])
+      expect(subject.customers).to eql({ person1.name => { balance: 0 }, person2.name => { balance: 0 } })
     end
 
     it "updates the person's bank hash" do
@@ -45,8 +44,24 @@ describe Bank do
     end
   end
 
-  # describe '#deposit' do
-  #   it 'does something' do
-  #   end
-  # end
+  describe '#deposit' do
+    before do
+      subject.open_account(person1)
+      subject.deposit(person1, 750)
+    end
+
+    it "increases the bank's balance." do
+      bank_bal = subject.customers[person1.name][:balance]
+      expect(bank_bal).to eql(750)
+    end
+
+    it "increases the person's bank balance" do
+      customer_bal = person1.banks[subject.bank_name][:balance]
+      expect(customer_bal).to eql(750)
+    end
+
+    it "decreases the person's cash amount" do
+      expect(person1.cash).to eql(250)
+    end
+  end
 end

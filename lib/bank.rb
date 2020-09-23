@@ -4,7 +4,7 @@ class Bank
 
   def initialize(bank_name)
     @bank_name = bank_name
-    @customers = []
+    @customers = {}
     creation_msg
   end
 
@@ -13,8 +13,14 @@ class Bank
   end
 
   def open_account(customer)
-    customers <<  { customer.name => { balance: 0 } }
+    customers[customer.name] = { balance: 0 }
     customer.add_bank(bank_name)
     "An account has been opened for #{customer.name} with #{bank_name}."
+  end
+
+  def deposit(customer, amt)
+    customers[customer.name][:balance] += amt
+    customer.banks[bank_name][:balance] += amt
+    customer.cash -= amt
   end
 end
