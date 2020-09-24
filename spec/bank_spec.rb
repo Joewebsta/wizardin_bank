@@ -78,4 +78,58 @@ describe Bank do
       end
     end
   end
+
+  describe '#withdrawal' do
+    context 'when bank balance exceeds withdrawal amount' do
+      before do
+        subject.open_account(person1)
+        subject.deposit(person1, 750)
+        @message = subject.withdrawal(person1, 250)
+      end
+
+      it 'decreases the bank balance' do
+        bank_bal = subject.customers[person1.name][:balance]
+        expect(bank_bal).to eql(500)
+      end
+
+      it "decreases the person's bank balance" do
+        customer_bal = person1.banks[subject.bank_name][:balance]
+        expect(customer_bal).to eql(500)
+      end
+
+      it "increase the person's cash" do
+        expect(person1.cash).to eql(500)
+      end
+
+      it 'prints a withdrawal message' do
+        expect(@message).to eql('Joe has withdrawn 250 galleons. Balance: 500.')
+      end
+    end
+
+    context 'when withdrawal amount exceeds bank balance' do
+      before do
+        subject.open_account(person1)
+        subject.deposit(person1, 750)
+        @message = subject.withdrawal(person1, 1000)
+      end
+
+      it 'does not change the bank balance' do
+        bank_bal = subject.customers[person1.name][:balance]
+        expect(bank_bal).to eql(750)
+      end
+
+      it "does not change the person's bank balance" do
+        customer_bal = person1.banks[subject.bank_name][:balance]
+        expect(customer_bal).to eql(750)
+      end
+
+      it "does not increase the person's cash" do
+        expect(person1.cash).to eql(250)
+      end
+
+      it 'prints an insufficient funds message' do
+        expect(@message).to eql('Insufficient funds.')
+      end
+    end
+  end
 end
