@@ -22,5 +22,8 @@ class Bank
     customers[customer.name][:balance] += amt
     customer.banks[bank_name][:balance] += amt
     customer.cash -= amt
+
+    bank_bal = customer.banks[bank_name][:balance]
+    "#{amt} galleons have been deposited into #{customer.name}'s' #{bank_name} account. Balance: #{bank_bal} Cash: #{customer.cash}."
   end
 end

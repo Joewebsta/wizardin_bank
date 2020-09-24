@@ -47,7 +47,7 @@ describe Bank do
   describe '#deposit' do
     before do
       subject.open_account(person1)
-      subject.deposit(person1, 750)
+      @message = subject.deposit(person1, 750)
     end
 
     it "increases the bank's balance." do
@@ -62,6 +62,10 @@ describe Bank do
 
     it "decreases the person's cash amount" do
       expect(person1.cash).to eql(250)
+    end
+
+    it 'prints a deposit update message' do
+      expect(@message).to eql("750 galleons have been deposited into Joe's' JP Morgan Chase account. Balance: 750 Cash: 250.")
     end
   end
 end
