@@ -45,27 +45,37 @@ describe Bank do
   end
 
   describe '#deposit' do
-    before do
-      subject.open_account(person1)
-      @message = subject.deposit(person1, 750)
+    context 'when customer cash exceeds depoit amt' do
+      before do
+        subject.open_account(person1)
+        @message = subject.deposit(person1, 750)
+      end
+
+      it "increases the bank's balance." do
+        bank_bal = subject.customers[person1.name][:balance]
+        expect(bank_bal).to eql(750)
+      end
+
+      it "increases the person's bank balance" do
+        customer_bal = person1.banks[subject.bank_name][:balance]
+        expect(customer_bal).to eql(750)
+      end
+
+      it "decreases the person's cash amount" do
+        expect(person1.cash).to eql(250)
+      end
+
+      it 'prints a deposit update message' do
+        expect(@message).to eql("750 galleons have been deposited into Joe's' JP Morgan Chase account. Balance: 750 Cash: 250.")
+      end
     end
 
-    it "increases the bank's balance." do
-      bank_bal = subject.customers[person1.name][:balance]
-      expect(bank_bal).to eql(750)
-    end
-
-    it "increases the person's bank balance" do
-      customer_bal = person1.banks[subject.bank_name][:balance]
-      expect(customer_bal).to eql(750)
-    end
-
-    it "decreases the person's cash amount" do
-      expect(person1.cash).to eql(250)
-    end
-
-    it 'prints a deposit update message' do
-      expect(@message).to eql("750 galleons have been deposited into Joe's' JP Morgan Chase account. Balance: 750 Cash: 250.")
+    context 'when deposit amount exceeds customer cash ' do
+      it 'prevents depositing more than available customer cash' do
+        subject.open_account(person1)
+        message = subject.deposit(person1, 5000)
+        expect(message).to eql('Joe does not have enough cash to perform this deposit.')
+      end
     end
   end
 end

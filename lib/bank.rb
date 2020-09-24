@@ -19,11 +19,15 @@ class Bank
   end
 
   def deposit(customer, amt)
-    customers[customer.name][:balance] += amt
-    customer.banks[bank_name][:balance] += amt
-    customer.cash -= amt
+    if amt > customer.cash
+      "#{customer.name} does not have enough cash to perform this deposit."
+    else
+      customers[customer.name][:balance] += amt
+      customer.banks[bank_name][:balance] += amt
+      customer.cash -= amt
 
-    bank_bal = customer.banks[bank_name][:balance]
-    "#{amt} galleons have been deposited into #{customer.name}'s' #{bank_name} account. Balance: #{bank_bal} Cash: #{customer.cash}."
+      bank_bal = customer.banks[bank_name][:balance]
+      "#{amt} galleons have been deposited into #{customer.name}'s' #{bank_name} account. Balance: #{bank_bal} Cash: #{customer.cash}."
+    end
   end
 end
