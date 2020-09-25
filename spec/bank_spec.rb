@@ -132,4 +132,56 @@ describe Bank do
       end
     end
   end
+
+  describe '#transfer' do
+    let(:wells) { Bank.new('Wells Fargo') }
+
+    before do
+      wells.open_account(person1)
+      subject.open_account(person1)
+      subject.deposit(person1, 750)
+    end
+
+    context 'when bank balance exceeds transfer amount' do
+      before { @message = subject.transfer(person1, wells, 450) }
+
+      it 'decreases the balance of the bank initiating the transfer' do
+        bank_bal = subject.customers[person1.name][:balance]
+        expect(bank_bal).to eql(300)
+      end
+
+      it 'increases the balance of the bank receiving the transfer' do
+        bank_bal = wells.customers[person1.name][:balance]
+        expect(bank_bal).to eql(450)
+      end
+
+      it 'does not change the customer cash balance' do
+        expect(person1.cash).to eql(250)
+      end
+
+      it 'prints a transfer message' do
+        message = 'Joe has transferred 450 galleons from JP Morgan Chase to Wells Fargo.'
+        expect(@message).to eql(message)
+      end
+    end
+
+    context 'when transfer amount exceeds bank balance' do
+      before { @message = subject.transfer(person1, wells, 10_000) }
+
+      it 'prints an insufficient funds message' do
+        expect(@message).to eql('Insufficient funds.')
+      end
+    end
+
+    context 'when customer does not have an account with receiving bank' do
+      before do
+      end
+
+      it 'returns a does not have and account message.' do
+        b_of_a = Bank.new('Bank of America')
+        message = subject.transfer(person1, b_of_a, 450)
+        expect(message).to eql('Joe does not have an account with Bank of America.')
+      end
+    end
+  end
 end

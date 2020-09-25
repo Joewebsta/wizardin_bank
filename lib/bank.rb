@@ -42,4 +42,16 @@ class Bank
     bank_bal = customer.banks[bank_name][:balance]
     "#{customer.name} has withdrawn #{amt} galleons. Balance: #{bank_bal}."
   end
+
+  def transfer(customer, bank, amt)
+    customer_bank_bal = customers[customer.name][:balance]
+    return 'Please provide a valid transfer amount.' if amt.negative?
+    return 'Insufficient funds.' if amt > customer_bank_bal
+    return "#{customer.name} does not have an account with #{bank.bank_name}." if bank.customers[customer.name].nil?
+
+    customers[customer.name][:balance] -= amt
+    bank.customers[customer.name][:balance] += amt
+
+    "#{customer.name} has transferred #{amt} galleons from #{bank_name} to #{bank.bank_name}."
+  end
 end
